@@ -46,7 +46,7 @@ function build() {
     })
     .catch((e) => {
       console.error(
-        "Upload to yare failed. Do you a yare game open with the tampermonkey userscript?\nhttps://raw.githubusercontent.com/swz-gh/yare-sync/main/dist/client.js"
+        "Upload to yare failed. Do you have a yare game open with the tampermonkey userscript?\nhttps://raw.githubusercontent.com/swz-gh/yare-sync/main/dist/client.js"
           .red.bold
       );
     });
