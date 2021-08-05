@@ -19,7 +19,7 @@ const flags = process.argv.splice(2);
 
 const shouldwatch = flags.includes("-w") || flags.includes("--watch");
 const shouldsync = flags.includes("-s") || flags.includes("--sync");
-const shouldsync = flags.includes("-a") || flags.includes("--switch-acc");
+const switchacc = flags.includes("-a") || flags.includes("--switch-acc");
 
 const usingts = fs.existsSync(path.join(__dirname, "src/main.ts"));
 const usingjs = fs.existsSync(path.join(__dirname, "src/main.js"));
@@ -82,7 +82,7 @@ async function main() {
       os.tmpdir(),
       "yare-sync-last-session.json"
     );
-    if (fs.existsSync(savedSessionFilePath)) {
+    if (fs.existsSync(savedSessionFilePath) && !switchacc) {
       let savedSessionFile = JSON.parse(
         fs.readFileSync(savedSessionFilePath, "utf-8")
       );
