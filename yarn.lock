@@ -600,16 +600,22 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-yare-sync@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/yare-sync/-/yare-sync-1.0.0.tgz#02c10b7b207b30bb6973c6c5871ccb3b097d8011"
-  integrity sha512-WIjD4iQ5SQ5nVxinatYn3vdntXlUadiB5lMJ4r803PDKoNgN9xC3XKU692+tOg9eRFv4w0Iym4qcQ/bhwfktEQ==
+ws@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.0.0.tgz#550605d13dfc1437c9ec1396975709c6d7ffc57d"
+  integrity sha512-6AcSIXpBlS0QvCVKk+3cWnWElLsA6SzC0lkQ43ciEglgXJXiCWK3/CGFEJ+Ybgp006CMibamAsqOlxE9s4AvYA==
+
+yare-sync@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/yare-sync/-/yare-sync-1.0.1.tgz#247990e310aee66cbd923c88bb294c896ea88dca"
+  integrity sha512-hSRWKudA771ip35d/U4AzmxL4AYOWeHAUbh7tsz5JD9ixoEEX9k24aBVv5YSFkBUbfWB8tFDAYDHTVBwITgYUQ==
   dependencies:
     "@rollup/plugin-commonjs" "^19.0.0"
     "@rollup/plugin-url" "^6.0.0"
     axios "^0.21.1"
     express "^4.17.1"
     uuid "^8.3.2"
+    ws "^8.0.0"
 
 yarn@^1.22.10:
   version "1.22.10"
