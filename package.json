@@ -32,7 +32,7 @@
     "esbuild": "^0.12.15",
     "node-watch": "^0.7.1",
     "typescript": "^4.3.5",
-    "yare-sync": "1.0.1",
+    "yare-sync": "2",
     "yarn": "^1.22.10"
   }
 }

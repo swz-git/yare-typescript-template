@@ -55,7 +55,7 @@ async function build() {
   let games = await sync.getGames(acc.user_id);
   let successful = await sync.sendCode(code, games, acc);
   if (successful) {
-    console.log("Uploaded your code to these games:".green.bold, games);
+    console.log("Uploaded your code to these games:".green.bold, games.map(g=>g?`${g.server}/${g.id}`:g));
   } else {
     console.error("Upload to yare failed.".red.bold);
   }
@@ -67,7 +67,7 @@ function login() {
     let username = ((await input()) + "").split("\n")[0].split("\r")[0];
     console.log("Password (SHOWN):");
     let password = ((await input()) + "").split("\n")[0].split("\r")[0];
-    console.log("Trying to log in as".yellow, password);
+    console.log("Trying to log in as".yellow, username);
     let acc = sync.login(username, password).catch(async (e) => {
       console.log("Invalid username or password, try again".red.bold);
       resolve(await login());
