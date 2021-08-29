@@ -53,7 +53,7 @@ async function build() {
   else console.log("Built successfully".green.bold);
 
   if (autoupload) console.log("Auto-upload enabled".green.bold);
-  if (shouldsync) await upload();
+  if (shouldsync || autoupload) await upload();
 }
 
 const uploaded = [];
@@ -75,7 +75,7 @@ async function upload() {
     console.error("Upload to yare failed.".red.bold);
   }
 
-  uploadTimer = setTimeout(() => upload(), 15000);
+  if(autoupload) uploadTimer = setTimeout(() => upload(), 15000);
 }
 
 function login() {
@@ -95,7 +95,7 @@ function login() {
 }
 
 async function main() {
-  if (shouldsync) {
+  if (shouldsync || autoupload) {
     let savedSessionFilePath = path.join(
       os.tmpdir(),
       "yare-sync-last-session.json"
