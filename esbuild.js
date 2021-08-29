@@ -21,16 +21,24 @@ const shouldwatch = flags.includes("-w") || flags.includes("--watch");
 const shouldsync = flags.includes("-s") || flags.includes("--sync");
 const switchacc = flags.includes("-a") || flags.includes("--switch-acc");
 const nominify = flags.includes("-nm") || flags.includes("--no-minify");
+const custommain = // sorry for ugly code, this is so terrible
+  (
+    flags.find((arg) => {
+      return (arg.match(/(?<=--main=).+/) ?? [])[0] ?? false;
+    }) ?? ""
+  ).replace("--main=", "") || false;
 
-const usingts = fs.existsSync(path.join(__dirname, "src/main.ts"));
+// const usingts = fs.existsSync(path.join(__dirname, "src/main.ts"));
 const usingjs = fs.existsSync(path.join(__dirname, "src/main.js"));
 
-if (!usingjs && !usingts) {
-  console.log("You don't have a main file smh");
+let mainfile = usingjs ? "src/main.js" : "src/main.ts";
+
+custommain && (mainfile = custommain);
+
+if (!fs.existsSync(mainfile)) {
+  console.log("You don't have a main file".red.underline);
   process.exit(0);
 }
-
-let mainfile = usingjs ? "src/main.js" : "src/main.ts";
 
 const esbuildConfig = {
   entryPoints: [mainfile],
