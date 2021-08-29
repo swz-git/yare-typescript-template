@@ -17,16 +17,18 @@ function input() {
 
 const flags = process.argv.splice(2);
 
+// average no casing enjoyer
 const shouldwatch = flags.includes("-w") || flags.includes("--watch");
 const shouldsync = flags.includes("-s") || flags.includes("--sync");
 const switchacc = flags.includes("-a") || flags.includes("--switch-acc");
 const nominify = flags.includes("-nm") || flags.includes("--no-minify");
+const autoupload = flags.includes("-u") || flags.includes("--auto-upload");
 
 const usingts = fs.existsSync(path.join(__dirname, "src/main.ts"));
 const usingjs = fs.existsSync(path.join(__dirname, "src/main.js"));
 
 if (!usingjs && !usingts) {
-  console.log("You don't have a main file smh");
+  console.log("You don't have a main file smh my head");
   process.exit(0);
 }
 
@@ -46,24 +48,36 @@ let acc = null;
 async function build() {
   let result = esbuild.buildSync(esbuildConfig);
 
-  let code = fs.readFileSync(esbuildConfig.outfile, "utf-8");
-
   if (result.errors.length > 0)
     return console.error("Build failed ):".red.bold);
   else console.log("Built successfully".green.bold);
 
-  if (!shouldsync) return;
-  let games = await sync.getGames(acc.user_id);
+  if (autoupload) console.log("Auto-upload enabled".green.bold);
+  if (shouldsync) await upload();
+}
+
+const uploaded = [];
+let uploadTimer;
+
+async function upload() {
+  let code = fs.readFileSync(esbuildConfig.outfile, "utf-8");
+  let games = (await sync.getGames(acc.user_id)).filter((g) => !uploaded.includes(g.id));
   let successful = await sync.sendCode(code, games, acc);
   if (successful) {
-    console.log(
-      "Uploaded your code to these games:".green.bold,
-      games.map((g) => (g ? `${g.server}/${g.id}` : g))
-    );
+    if (games.length > 0) {
+      console.log(
+        "Uploaded your code to these games:".green.bold,
+        games.map((g) => (g ? `${g.server}/${g.id}` : g))
+      );
+      uploaded.push(...games.map((g) => g.id));
+    }
   } else {
     console.error("Upload to yare failed.".red.bold);
   }
+
+  uploadTimer = setTimeout(() => upload(), 15000);
 }
+
 function login() {
   return new Promise(async (resolve) => {
     console.log("Log in to yare to enable yare-sync".bold);
@@ -105,8 +119,9 @@ async function main() {
     fs.writeFileSync(savedSessionFilePath, JSON.stringify(acc), "utf-8");
   }
 
+  await build();
+
   if (shouldwatch) {
-    await build();
     watch(
       path.dirname(mainfile),
       {
@@ -114,11 +129,11 @@ async function main() {
       },
       (_, file) => {
         console.log("File change".yellow, file);
+        uploaded.splice(0, uploaded.length);
+        clearTimeout(uploadTimer);
         build();
       }
     );
-  } else {
-    await build();
   }
 }
 
